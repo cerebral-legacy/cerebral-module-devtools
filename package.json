@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/cerebral/cerebral-module-devtools#readme",
   "devDependencies": {
-    "cerebral": "^0.33.2",
+    "cerebral": "^0.33.5",
     "commitizen": "^2.5.0",
     "coveralls": "^2.11.6",
     "cz-customizable": "^2.7.0",
@@ -33,9 +33,20 @@
     "validate-commit-msg": "^1.1.1"
   },
   "peerDependencies": {
-    "cerebral": "^0.33.2"
+    "cerebral": "^0.33.5"
   },
   "dependencies": {
-    "cerebral-module-signal-store": "^0.1.0"
+    "cerebral-module-signal-store": "^0.1.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "release": {
+    "analyzeCommits": "./sr-prerelease.js"
   }
 }

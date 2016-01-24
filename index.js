@@ -50,7 +50,7 @@ module.exports = function Devtools () {
 
       if (utils.hasLocalStorage()) {
         disableDebugger = JSON.parse(localStorage.getItem('cerebral_disable_debugger'))
-        signals = JSON.parse(localStorage.getItem('cerebral_signals'))
+        signals = JSON.parse(localStorage.getItem('cerebral_signals')) || []
         willKeepState = JSON.parse(localStorage.getItem('cerebral_willKeepState'))
       }
 
