@@ -7,6 +7,10 @@ global.window = {
 }
 global.CustomEvent = function () {}
 
+global.document = {
+  addEventListener: function () {}
+}
+
 var Model = function () {
   return function () {
     return {
