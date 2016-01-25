@@ -1,5 +1,6 @@
 {
   "name": "cerebral-module-devtools",
+  "version":  "0.0.0-semantically-released",
   "description": "Module to enable Google Chrome debugger extension for Cerebral application",
   "main": "index.js",
   "scripts": {
