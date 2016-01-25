@@ -24,6 +24,7 @@
   "devDependencies": {
     "cerebral": "^0.33.5",
     "commitizen": "^2.5.0",
+    "conventional-changelog": "0.0.17",
     "coveralls": "^2.11.6",
     "cz-customizable": "^2.7.0",
     "ghooks": "^1.0.3",
