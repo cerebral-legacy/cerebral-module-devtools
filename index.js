@@ -204,6 +204,12 @@ module.exports = function Devtools () {
       }
     })
 
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) {
+        updateSettings()
+      }
+    })
+
     var services = {
       update: update,
       start: function () {
