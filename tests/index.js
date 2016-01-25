@@ -27,11 +27,11 @@ var Model = function () {
 exports['should load devtools'] = function (test) {
   var controller = Controller(Model({}))
 
-  console.log(controller.modules({
+  controller.modules({
     devtools: Devtools()
-  }))
+  })
 
-  console.log(controller.getServices())
+  controller.getServices()
   test.equal(controller.getServices().devtools.store.getSignals().length, 0)
   test.done()
 }
