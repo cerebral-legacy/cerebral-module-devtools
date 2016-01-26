@@ -224,13 +224,14 @@ module.exports = function Devtools () {
       return services
     }
 
-    if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
-      window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals()
-    }
+    controller.on('modulesLoaded', function () {
+      if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
+        window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals()
+      }
 
-    var event = new CustomEvent('cerebral.dev.cerebralPing')
-    window.dispatchEvent(event)
-
+      var event = new CustomEvent('cerebral.dev.cerebralPing')
+      window.dispatchEvent(event)
+    })
     controller.on('change', updateSignals)
   }
 }
