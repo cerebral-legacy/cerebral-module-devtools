@@ -4,9 +4,8 @@ var SignalStore = require('cerebral-module-signal-store')
 var utils = require('./utils')
 
 module.exports = function Devtools () {
-  if (typeof window === 'undefined') {
-    return function () {}
-  }
+  if (typeof window === 'undefined') { return function () {} }
+  if (typeof window.chrome === 'undefined') { return function () {} }
 
   return function init (module, controller) {
     module.alias(MODULE)

@@ -3,7 +3,8 @@ var Devtools = require('../')
 
 global.window = {
   addEventListener: function () {},
-  dispatchEvent: function () {}
+  dispatchEvent: function () {},
+  chrome: true
 }
 global.CustomEvent = function () {}
 
