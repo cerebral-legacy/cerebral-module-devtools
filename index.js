@@ -223,14 +223,23 @@ module.exports = function Devtools () {
       return services
     }
 
-    controller.on('modulesLoaded', function () {
+    function start () {
       if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
         window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals()
       }
 
       var event = new CustomEvent('cerebral.dev.cerebralPing')
       window.dispatchEvent(event)
+    }
+
+    var listeners = controller.listeners('modulesLoaded')
+    controller.removeAllListeners('modulesLoaded')
+
+    controller.on('modulesLoaded', start)
+    listeners.forEach(function (listener) {
+      controller.on('modulesLoaded', listener)
     })
+
     controller.on('change', updateSignals)
   }
 }
