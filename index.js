@@ -230,6 +230,8 @@ module.exports = function Devtools () {
 
       var event = new CustomEvent('cerebral.dev.cerebralPing')
       window.dispatchEvent(event)
+
+      console.assert(controller.listeners('modulesLoaded')[0] === start, 'Cerebral devtools: Please do not place any listeners to `modulesLoaded` event before devtools\'s one.')
     }
 
     var listeners = controller.listeners('modulesLoaded')
