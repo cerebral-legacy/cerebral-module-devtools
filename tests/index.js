@@ -28,7 +28,7 @@ var Model = function () {
 exports['should load devtools'] = function (test) {
   var controller = Controller(Model({}))
 
-  controller.modules({
+  controller.addModules({
     devtools: Devtools()
   })
 
