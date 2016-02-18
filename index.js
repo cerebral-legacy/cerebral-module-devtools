@@ -2,6 +2,7 @@
 var MODULE = 'cerebral-module-devtools'
 var SignalStore = require('cerebral-module-signal-store')
 var utils = require('./utils')
+var requestAnimationFrame = requestAnimationFrame || function (cb) { setTimeout(cb) }
 
 module.exports = function Devtools () {
   if (typeof window === 'undefined') { return function () {} }
@@ -28,19 +29,61 @@ module.exports = function Devtools () {
     var hasInitialPayload = false
     var disableDebugger = false
     var willKeepState = false
-    var lastExecutedSignalIndex = 0
     var APP_ID = String(Date.now())
     var VERSION = 'v2'
+    var isAwaitingFrame = false
+    var nextSignalInLine = 0
 
-    var getExecutingSignals = function (signals) {
-      var executingSignals = []
-      for (var x = signals.length - 1; x >= 0; x--) {
-        if (!signals[x].isExecuting) {
-          break
-        }
-        executingSignals.unshift(signals[x])
+    var hasExecutingSignal = function (signal) {
+      function traverseSignals (signals) {
+        return signals.reduce(function (hasExecutingSignal, signal) {
+          if (hasExecutingSignal || signal.isExecuting) {
+            return true
+          }
+
+          return traverseChain(signal.branches)
+        }, false)
       }
-      return executingSignals
+
+      function traverseChain (chain) {
+        return chain.reduce(function (hasExecutingSignal, action) {
+          if (hasExecutingSignal) {
+            return true
+          }
+
+          if (Array.isArray(action)) {
+            return traverseChain(action)
+          }
+
+          return traverseAction(action)
+        }, false)
+      }
+
+      function traverseAction (action) {
+        var hasExecutingSignal = false
+        if (action.outputPath) {
+          hasExecutingSignal = traverseChain(action.outputs[action.outputPath])
+        }
+        if (action.signals) {
+          hasExecutingSignal = hasExecutingSignal || traverseSignals(action.signals)
+        }
+        return hasExecutingSignal
+      }
+
+      if (signal.isExecuting) {
+        return true
+      }
+
+      return traverseChain(signal.branches)
+    }
+
+    var getOldestExecutingSignalIndex = function (signals, fromIndex) {
+      for (var x = fromIndex; x < signals.length; x++) {
+        if (hasExecutingSignal(signals[x])) {
+          return x
+        }
+      }
+      return signals.length - 1
     }
 
     var update = function (signalType, data, forceUpdate) {
@@ -63,9 +106,7 @@ module.exports = function Devtools () {
 
     var getInit = function () {
       var signals = signalStore.getSignals()
-      var executingSignals = getExecutingSignals(signals)
-
-      lastExecutedSignalIndex = signals.indexOf(executingSignals[0])
+      nextSignalInLine = signals.length ? getOldestExecutingSignalIndex(signals, nextSignalInLine) : 0
       hasInitialPayload = true
       return {
         initialModel: controller.get(),
@@ -80,18 +121,25 @@ module.exports = function Devtools () {
       update('init', getInit())
     }
 
-    var updateSignals = function (arg) {
-      var signals = signalStore.getSignals()
-      var executingSignals = getExecutingSignals(signals)
+    var updateSignals = function () {
+      if (isAwaitingFrame) {
+        return
+      }
 
-      // In case last executed signal is now done
-      update('signals', {
-        signals: signals.slice(lastExecutedSignalIndex),
-        isExecutingAsync: signalStore.isExecutingAsync()
+      isAwaitingFrame = true
+      requestAnimationFrame(function () {
+        var signals = signalStore.getSignals()
+
+        // In case last executed signal is now done
+        update('signals', {
+          signals: signals.slice(nextSignalInLine),
+          isExecutingAsync: signalStore.isExecutingAsync()
+        })
+
+        // Set new last executed signal
+        nextSignalInLine = signals.length ? getOldestExecutingSignalIndex(signals, nextSignalInLine) : 0
+        isAwaitingFrame = false
       })
-
-      // Set new last executed signal
-      lastExecutedSignalIndex = signals.indexOf(executingSignals[0])
     }
 
     var updateSettings = function () {
