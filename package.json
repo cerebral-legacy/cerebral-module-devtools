@@ -38,7 +38,7 @@
     "cerebral": "^0.33.8"
   },
   "dependencies": {
-    "cerebral-module-signal-store": "^0.1.5"
+    "cerebral-module-signal-store": "^0.1.6"
   },
   "config": {
     "commitizen": {
