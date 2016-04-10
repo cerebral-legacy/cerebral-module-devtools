@@ -30,7 +30,7 @@ module.exports = function Devtools () {
     var disableDebugger = false
     var willKeepState = false
     var APP_ID = String(Date.now())
-    var VERSION = 'v2'
+    var VERSION = 'v3'
     var isAwaitingFrame = false
     var nextSignalInLine = 0
 
@@ -194,7 +194,15 @@ module.exports = function Devtools () {
     }
 
     window.addEventListener('cerebral.dev.debuggerPing', function () {
-      initialize()
+      var event = new CustomEvent('cerebral.dev.cerebralPong', {
+        detail: JSON.stringify({
+          type: 'init',
+          app: APP_ID,
+          version: VERSION,
+          data: getInit()
+        })
+      })
+      window.dispatchEvent(event)
     })
 
     window.addEventListener('cerebral.dev.toggleKeepState', function () {
