@@ -117,10 +117,6 @@ module.exports = function Devtools () {
       }
     }
 
-    var updateInit = function () {
-      update('init', getInit())
-    }
-
     var updateSignals = function () {
       if (isAwaitingFrame) {
         return
@@ -147,50 +143,6 @@ module.exports = function Devtools () {
         willKeepState: willKeepState,
         disableDebugger: disableDebugger
       }, true)
-    }
-
-    var initialize = function () {
-      if (isInitialized) {
-        updateInit()
-      }
-      var signals = []
-
-      if (utils.hasLocalStorage()) {
-        disableDebugger = JSON.parse(localStorage.getItem('cerebral_disable_debugger'))
-        signals = JSON.parse(localStorage.getItem('cerebral_signals')) || []
-        willKeepState = JSON.parse(localStorage.getItem('cerebral_willKeepState'))
-      }
-
-      isInitialized = true
-
-      // Might be an async signal running here
-      if (willKeepState && signalStore.isExecutingAsync()) {
-        controller.once('signalEnd', function () {
-          signalStore.setSignals(signals)
-          signalStore.remember(signalStore.getSignals().length - 1)
-          var event = new CustomEvent('cerebral.dev.cerebralPong', {
-            detail: JSON.stringify({
-              type: 'init',
-              app: APP_ID,
-              version: VERSION,
-              data: getInit()
-            })
-          })
-          window.dispatchEvent(event)
-        })
-      } else {
-        signalStore.setSignals(signals)
-        signalStore.rememberInitial(signalStore.getSignals().length - 1)
-        var event = new CustomEvent('cerebral.dev.cerebralPong', {
-          detail: JSON.stringify({
-            type: 'init',
-            app: APP_ID,
-            version: VERSION,
-            data: getInit()
-          })
-        })
-        window.dispatchEvent(event)
-      }
     }
 
     window.addEventListener('cerebral.dev.debuggerPing', function () {
