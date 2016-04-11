@@ -35,10 +35,10 @@
     "validate-commit-msg": "^1.1.1"
   },
   "peerDependencies": {
-    "cerebral": "^0.33.8"
+    "cerebral": "^0.33.8 || ^0.34.0-0"
   },
   "dependencies": {
-    "cerebral-module-signal-store": "^0.1.6"
+    "cerebral-module-signal-store": "^0.1.7"
   },
   "config": {
     "commitizen": {
