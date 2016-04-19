@@ -9,12 +9,10 @@ module.exports = function Devtools () {
   if (typeof window.chrome === 'undefined') { return function () {} }
 
   return function init (module, controller) {
-    if (controller.addContextProvider) {
-      controller.addContextProvider(require('./providers/actionServicesCallsProvider'))
-      controller.addContextProvider(require('./providers/actionOutputProvider'))
-      controller.addContextProvider(require('./providers/actionInputProvider'))
-      controller.addContextProvider(require('./providers/signalOptionsProvider'))
-    }
+    controller.addContextProvider(require('./providers/actionServicesCallsProvider'))
+    controller.addContextProvider(require('./providers/actionOutputProvider'))
+    controller.addContextProvider(require('./providers/actionInputProvider'))
+    controller.addContextProvider(require('./providers/signalOptionsProvider'))
 
     module.addModules({
       store: SignalStore()
@@ -33,9 +31,8 @@ module.exports = function Devtools () {
     var isInitialized = false
     var hasInitialPayload = false
     var disableDebugger = false
-    var willKeepState = false
     var APP_ID = String(Date.now())
-    var VERSION = 'v3'
+    var VERSION = 'v4'
     var isAwaitingFrame = false
     var nextSignalInLine = 0
 
@@ -116,7 +113,6 @@ module.exports = function Devtools () {
       return {
         initialModel: controller.get(),
         signals: signals,
-        willKeepState: willKeepState,
         disableDebugger: disableDebugger,
         isExecutingAsync: signalStore.isExecutingAsync()
       }
@@ -145,62 +141,37 @@ module.exports = function Devtools () {
 
     var updateSettings = function () {
       update('settings', {
-        willKeepState: willKeepState,
         disableDebugger: disableDebugger
       }, true)
     }
+
+    window.addEventListener('cerebral.dev.components', function (event) {
+      update('components', event.detail, true)
+    })
 
     window.addEventListener('cerebral.dev.debuggerPing', function () {
       var signals = []
 
       if (utils.hasLocalStorage()) {
         disableDebugger = JSON.parse(localStorage.getItem('cerebral_disable_debugger'))
-        signals = JSON.parse(localStorage.getItem('cerebral_signals')) || []
-        willKeepState = JSON.parse(localStorage.getItem('cerebral_willKeepState'))
       }
 
-      // Might be an async signal running here
-      if (willKeepState && signalStore.isExecutingAsync()) {
-        controller.once('signalEnd', function () {
-          signalStore.setSignals(signals)
-          signalStore.remember(signalStore.getSignals().length - 1)
-          isInitialized = true
-          var event = new CustomEvent('cerebral.dev.cerebralPong', {
-            detail: JSON.stringify({
-              type: 'init',
-              app: APP_ID,
-              version: VERSION,
-              data: getInit()
-            })
-          })
-          window.dispatchEvent(event)
+      signalStore.setSignals(signals)
+      signalStore.rememberInitial(signalStore.getSignals().length - 1)
+      isInitialized = true
+      var event = new CustomEvent('cerebral.dev.cerebralPong', {
+        detail: JSON.stringify({
+          type: 'init',
+          app: APP_ID,
+          version: VERSION,
+          data: getInit()
         })
-      } else {
-        signalStore.setSignals(signals)
-        signalStore.rememberInitial(signalStore.getSignals().length - 1)
-        isInitialized = true
-        var event = new CustomEvent('cerebral.dev.cerebralPong', {
-          detail: JSON.stringify({
-            type: 'init',
-            app: APP_ID,
-            version: VERSION,
-            data: getInit()
-          })
-        })
-        window.dispatchEvent(event)
-      }
-    })
-
-    window.addEventListener('cerebral.dev.toggleKeepState', function () {
-      willKeepState = !willKeepState
-      updateSettings()
+      })
+      window.dispatchEvent(event)
     })
 
     window.addEventListener('cerebral.dev.toggleDisableDebugger', function () {
       disableDebugger = !disableDebugger
-      if (disableDebugger && willKeepState) {
-        willKeepState = !willKeepState
-      }
       updateSettings()
     })
 
@@ -239,8 +210,6 @@ module.exports = function Devtools () {
       signalStore.removeRunningSignals()
 
       if (utils.hasLocalStorage()) {
-        localStorage.setItem('cerebral_signals', isInitialized && willKeepState ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]))
-        localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(willKeepState))
         localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(disableDebugger))
       }
     })

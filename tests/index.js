@@ -1,4 +1,4 @@
-var Controller = require('cerebral')
+var Controller = require('cerebral').Controller
 var Devtools = require('../')
 var suite = {}
 var async = function (cb) {

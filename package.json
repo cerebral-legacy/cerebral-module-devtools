@@ -1,12 +1,11 @@
 {
   "name": "cerebral-module-devtools",
-  "version": "0.0.0-semantically-released",
+  "version":  "0.0.0-semantically-released",
   "description": "Module to enable Google Chrome debugger extension for Cerebral application",
   "main": "index.js",
   "scripts": {
     "pretest": "standard",
-    "test": "nodeunit tests && npm i cerebral@0.34.0-rc.4 && nodeunit tests",
-    "posttest": "npm i",
+    "test": "nodeunit tests",
     "coverage": "nyc --reporter=lcov --reporter=text npm test",
     "postcoverage": "cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
@@ -25,23 +24,24 @@
   },
   "homepage": "https://github.com/cerebral/cerebral-module-devtools#readme",
   "devDependencies": {
-    "cerebral": "^0.33.33",
+    "cerebral": "^0.35.0-0",
     "commitizen": "^2.5.0",
     "conventional-changelog": "0.0.17",
     "coveralls": "^2.11.6",
     "cz-customizable": "^2.7.0",
     "ghooks": "^1.0.3",
-    "nodeunit": "^0.9.1",
     "nyc": "^6.4.0",
+    "nodeunit": "^0.9.1",
+    "nyc": "^7.0.0",
     "semantic-release": "^4.3.5",
-    "standard": "^5.4.1",
-    "validate-commit-msg": "^1.1.1"
+    "standard": "^7.1.2",
+    "validate-commit-msg": "^2.6.1"
   },
   "peerDependencies": {
-    "cerebral": "^0.33.8 || ^0.34.0-rc.4"
+    "cerebral": "^0.35.0-0"
   },
   "dependencies": {
-    "cerebral-module-signal-store": "^0.1.8"
+    "cerebral-module-signal-store": "^0.2.0-0"
   },
   "config": {
     "commitizen": {
