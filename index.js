@@ -1,5 +1,4 @@
 /* eslint-env browser*/
-var MODULE = 'cerebral-module-devtools'
 var SignalStore = require('cerebral-module-signal-store')
 var utils = require('./utils')
 var requestAnimationFrame = requestAnimationFrame || function (cb) { setTimeout(cb) }
@@ -9,7 +8,12 @@ module.exports = function Devtools () {
   if (typeof window.chrome === 'undefined') { return function () {} }
 
   return function init (module, controller) {
-    module.alias(MODULE)
+    if (controller.addContextProvider) {
+      controller.addContextProvider(require('./providers/actionServicesCallsProvider'))
+      controller.addContextProvider(require('./providers/actionOutputProvider'))
+      controller.addContextProvider(require('./providers/actionInputProvider'))
+      controller.addContextProvider(require('./providers/signalOptionsProvider'))
+    }
 
     module.addModules({
       store: SignalStore()
