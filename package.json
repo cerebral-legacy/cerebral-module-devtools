@@ -1,11 +1,14 @@
 {
   "name": "cerebral-module-devtools",
-  "version":  "0.0.0-semantically-released",
+  "version": "0.0.0-semantically-released",
   "description": "Module to enable Google Chrome debugger extension for Cerebral application",
   "main": "index.js",
   "scripts": {
     "pretest": "standard",
-    "test": "nodeunit tests",
+    "test": "nodeunit tests && npm i cerebral@0.34.0-rc.4 && nodeunit tests",
+    "posttest": "npm i",
+    "coverage": "nyc --reporter=lcov --reporter=text npm test",
+    "postcoverage": "cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
@@ -28,8 +31,8 @@
     "coveralls": "^2.11.6",
     "cz-customizable": "^2.7.0",
     "ghooks": "^1.0.3",
-    "istanbul": "^0.4.2",
     "nodeunit": "^0.9.1",
+    "nyc": "^6.4.0",
     "semantic-release": "^4.3.5",
     "standard": "^5.4.1",
     "validate-commit-msg": "^1.1.1"
@@ -50,5 +53,10 @@
   },
   "release": {
     "analyzeCommits": "./sr-prerelease.js"
+  },
+  "nyc": {
+    "exclude": [
+      "tests/*"
+    ]
   }
 }
