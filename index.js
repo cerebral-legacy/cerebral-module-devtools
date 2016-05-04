@@ -2,6 +2,7 @@
 var SignalStore = require('cerebral-module-signal-store')
 var utils = require('./utils')
 var requestAnimationFrame = requestAnimationFrame || function (cb) { setTimeout(cb) }
+var staticTree = require('cerebral/src/staticTree')
 
 module.exports = function Devtools () {
   if (typeof window === 'undefined') { return function () {} }
@@ -267,6 +268,7 @@ module.exports = function Devtools () {
     function start () {
       if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
         window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals()
+        window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.staticTree = staticTree
       }
 
       var event = new CustomEvent('cerebral.dev.cerebralPing')
