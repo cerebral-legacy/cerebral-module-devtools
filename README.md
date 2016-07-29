@@ -10,25 +10,8 @@ Module to enable Google Chrome debugger extension for Cerebral application
 [![js-standard-style][standard-image]][standard-url]
 [![Discord][discord-image]][discord-url]
 
-### Install
-
-`npm install cerebral-module-devtools`
-
 ### How to use
-
-```js
-import Cerebral from 'cerebral';
-import Model from 'cerebral-model-baobab'
-import Devtools from 'cerebral-module-devtools';
-import App from './modules/app';
-
-var controller = Controller(Model({}))
-
-controller.addModules({
-  devtools: Devtools()
-  app: App
-})
-```
+Go to [http://www.cerebraljs.com/documentation/cerebral-module-devtools](http://www.cerebraljs.com/documentation/cerebral-module-devtools)
 
 [npm-image]: https://img.shields.io/npm/v/cerebral-module-devtools.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral-module-devtools
