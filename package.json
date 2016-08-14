@@ -38,7 +38,7 @@
     "validate-commit-msg": "^2.6.1"
   },
   "peerDependencies": {
-    "cerebral": "^0.35.0-0"
+    "cerebral": "^0.35.0-0 || ^1.0.0"
   },
   "dependencies": {
     "cerebral-module-signal-store": "^0.2.0-0"
