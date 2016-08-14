@@ -107,11 +107,10 @@ suite['should store details about mutations'] = function (test) {
 
   async(function () {
     var action = ctrl.getServices().devtools.store.getSignals()[0].branches[0]
-    test.deepEqual(action.mutations[0], {
-      name: 'set',
-      path: ['foo'],
-      args: ['bar']
-    })
+    test.ok(action.mutations[0].datetime)
+    test.equals(action.mutations[0].name, 'set')
+    test.deepEqual(action.mutations[0].path, ['foo'])
+    test.deepEqual(action.mutations[0].args, ['bar'])
     test.done()
   })
 }
@@ -130,26 +129,25 @@ suite['should store details about mutations correctly across sync and async sign
   ctrl.addSignals({
     'test': signalSync
   })
+  function ActionB (args) { args.output() }
+  ActionB.async = true
   var signalAsync = [
-    [
-      function ActionB (args) { args.output() }
-    ], function ActionC (args) {
+    ActionB, function ActionC (args) {
       args.state.set('foo', 'bar')
 
       async(function () {
         var actionAsync = ctrl.getServices().devtools.store.getSignals()[0].branches[1]
-        test.deepEqual(actionAsync.mutations[0], {
-          name: 'set',
-          path: ['foo'],
-          args: ['bar']
-        })
+        test.ok(actionAsync.mutations[0].datetime)
+        test.equals(actionAsync.mutations[0].name, 'set')
+        test.deepEqual(actionAsync.mutations[0].path, ['foo'])
+        test.deepEqual(actionAsync.mutations[0].args, ['bar'])
 
         var action = ctrl.getServices().devtools.store.getSignals()[0].branches[0][0].signals[0].branches[0]
-        test.deepEqual(action.mutations[0], {
-          name: 'set',
-          path: ['foo'],
-          args: ['bar']
-        })
+        test.ok(action.mutations[0].datetime)
+        test.equals(action.mutations[0].name, 'set')
+        test.deepEqual(action.mutations[0].path, ['foo'])
+        test.deepEqual(action.mutations[0].args, ['bar'])
+
         test.done()
       })
     }
