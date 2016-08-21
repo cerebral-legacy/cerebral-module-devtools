@@ -6,7 +6,10 @@ var staticTree = require('cerebral/src/staticTree')
 
 module.exports = function Devtools () {
   if (typeof window === 'undefined') { return function () {} }
-  if (typeof window.chrome === 'undefined') { return function () {} }
+  if (
+    typeof window.chrome === 'undefined' &&
+    !process && !process.versions && !process.versions.electron
+  ) { return function () {} }
 
   return function init (module, controller) {
     controller.addContextProvider(require('./providers/actionServicesCallsProvider'))
