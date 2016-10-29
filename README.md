@@ -1,5 +1,7 @@
 # cerebral-module-devtools
-Module to enable Google Chrome debugger extension for Cerebral application
+Module to enable Google Chrome debugger extension for Cerebral 1.x application
+
+In Cerebral 2 the devtools are integrated in the core.
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
