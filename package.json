@@ -1,18 +1,17 @@
 {
   "name": "cerebral-module-devtools",
-  "version":  "0.0.0-semantically-released",
+  "version":  "0.7.2",
   "description": "Module to enable Google Chrome debugger extension for Cerebral application",
   "main": "index.js",
   "scripts": {
     "pretest": "standard",
     "test": "nodeunit tests",
     "coverage": "nyc --reporter=lcov --reporter=text npm test",
-    "postcoverage": "cat ./coverage/lcov.info | coveralls",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "postcoverage": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cerebral/cerebral-module-devtools.git"
+    "url": "https://github.com/cerebral-legacy/cerebral-module-devtools.git"
   },
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "contributors": [
@@ -20,22 +19,18 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cerebral/cerebral-module-devtools/issues"
+    "url": "https://github.com/cerebral-legacy/cerebral-module-devtools/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral-module-devtools#readme",
+  "homepage": "https://github.com/cerebral-legacy/cerebral-module-devtools#readme",
   "devDependencies": {
     "cerebral": "^0.35.0-0",
     "commitizen": "^2.5.0",
-    "conventional-changelog": "0.0.17",
     "coveralls": "^2.11.6",
     "cz-customizable": "^2.7.0",
-    "ghooks": "^1.0.3",
     "nyc": "^6.4.0",
     "nodeunit": "^0.9.1",
     "nyc": "^7.0.0",
-    "semantic-release": "^4.3.5",
-    "standard": "^7.1.2",
-    "validate-commit-msg": "^2.6.1"
+    "standard": "^7.1.2"
   },
   "peerDependencies": {
     "cerebral": "^0.35.0-0 || ^1.0.0"
@@ -46,13 +41,7 @@
   "config": {
     "commitizen": {
       "path": "node_modules/cz-customizable"
-    },
-    "ghooks": {
-      "commit-msg": "validate-commit-msg"
     }
-  },
-  "release": {
-    "analyzeCommits": "./sr-prerelease.js"
   },
   "nyc": {
     "exclude": [
