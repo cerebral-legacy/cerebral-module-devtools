@@ -12,7 +12,7 @@ In Cerebral 2 the devtools are integrated in the core.
 [![Discord][discord-image]][discord-url]
 
 ### How to use
-Go to [http://www.cerebraljs.com/documentation/cerebral-module-devtools](http://www.cerebraljs.com/documentation/cerebral-module-devtools)
+Go to http://cerebral-website.herokuapp.com/documentation/cerebral-module-devtools](http://cerebral-website.herokuapp.com/documentation/cerebral-module-devtools)
 
 [npm-image]: https://img.shields.io/npm/v/cerebral-module-devtools.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral-module-devtools
